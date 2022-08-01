@@ -2,8 +2,8 @@
 
 React component to render a list of components inline, with full TypeScript support.
 
-```html
-<RenderMultiple of="{MyComponent}" from="{propsList}" />
+```javascript
+<RenderMultiple of={MyComponent} from={propsList} />
 ```
 
 ## Installation and Usage
@@ -26,9 +26,9 @@ import { Card } from "./Card";
 const MyCardList = ({ cards }) => {
   return (
     <ul>
-      {cards.map((card) => (
-        <Card key={card.id} {...card} />
-      ))}
+      {cards.map((card) => {
+        return <Card key={card.id} {...card} />;
+      })}
     </ul>
   );
 };

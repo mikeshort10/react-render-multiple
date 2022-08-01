@@ -23,7 +23,7 @@ type WithoutCommonProps<
   K extends string,
   P extends Maybe<Props<K>>
 > = BaseRenderMultipleProps<K, P> & {
-  fromPropsList: PropsList<P>;
+  from: PropsList<P>;
 };
 
 type WithCommonProps<
@@ -31,7 +31,7 @@ type WithCommonProps<
   L extends Maybe<Props<K>>,
   C extends Record<string, unknown>
 > = BaseRenderMultipleProps<K, L, C> & {
-  fromPropsList: PropsList<L>;
+  from: PropsList<L>;
   withCommonProps: C;
 };
 
@@ -71,18 +71,18 @@ const toArray = <T,>(t: Maybe<T[] | Record<string, T>>): T[] => {
 
 type MultipleProps<K extends string, P extends Maybe<Props<K>>> = Omit<
   WithoutCommonProps<K, P>,
-  "withCommonProps" | "fromPropsList"
+  "withCommonProps" | "from"
 > & {
-  fromPropsList: Maybe<P[]>;
+  from: Maybe<P[]>;
 };
 
 const Multiple = <K extends string, L extends Maybe<Props<K>>>({
   of: Component,
-  fromPropsList,
+  from,
   useKey,
 }: MultipleProps<K, L>) => {
   const getKey = createGetKey(useKey);
-  const list = (fromPropsList ?? []).map((ownProps, i) => {
+  const list = (from ?? []).map((ownProps, i) => {
     const key = getKey(ownProps, i);
     return <Component {...ownProps} key={key} />;
   });
@@ -97,15 +97,15 @@ export const RenderMultiple = <
   props: WithCommonProps<K, L, C> | WithoutCommonProps<K, L>
 ) => {
   if (hasCommonProps(props)) {
-    const { fromPropsList, withCommonProps, ...rest } = props;
-    const propsList = toArray(fromPropsList).map((ownProps) => ({
+    const { from, withCommonProps, ...rest } = props;
+    const propsList = toArray(from).map((ownProps) => ({
       ...withCommonProps,
       ...ownProps,
     }));
-    return <Multiple fromPropsList={propsList} {...rest} />;
+    return <Multiple from={propsList} {...rest} />;
   }
-  const { fromPropsList, ...rest } = props;
-  const propsList = toArray(fromPropsList);
+  const { from, ...rest } = props;
+  const propsList = toArray(from);
 
-  return <Multiple fromPropsList={propsList} {...rest} />;
+  return <Multiple from={propsList} {...rest} />;
 };
