@@ -1,6 +1,6 @@
 {
-  "name": "react-render-multiple",
-  "version": "1.0.0",
+  "name": "@mikeshort10/react-render-multiple",
+  "version": "1.0.8",
   "description": "React component for rendering a list of components",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
