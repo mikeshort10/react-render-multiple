@@ -1,6 +1,6 @@
 import React from "react";
 
-type Props<K extends string> = Record<string, unknown> & Record<K, string>;
+type Props<K extends string> = Record<string, unknown> & Record<K, unknown>;
 
 type Maybe<T> = T | null | undefined;
 
@@ -13,10 +13,10 @@ type PropsList<P> = Maybe<P[]> | Record<string, P>;
 type BaseRenderMultipleProps<
   K extends string,
   L extends Maybe<Props<K>>,
-  C extends Record<string, unknown> = {}
+  C extends Record<string, unknown> = Record<never, never>
 > = {
   of: React.FC<L & C>;
-  useKey: GetKey<K, L>;
+  useKey?: GetKey<K, L>;
 };
 
 type WithoutCommonProps<
@@ -43,7 +43,7 @@ const hasCommonProps = <
   props: WithoutCommonProps<K, L> | WithCommonProps<K, L, C>
 ): props is WithCommonProps<K, L, C> => {
   const key: keyof WithCommonProps<K, L, C> = "withCommonProps";
-  return props.hasOwnProperty(key);
+  return Object.prototype.hasOwnProperty.call(props, key);
 };
 
 const createGetKey = <K extends string, P extends Maybe<Props<K>>>(
@@ -56,8 +56,9 @@ const createGetKey = <K extends string, P extends Maybe<Props<K>>>(
     const getKeyFn =
       typeof useKey === "function"
         ? useKey
-        : (props: P, i: number): string | undefined =>
-            props?.[useKey] ?? i.toString();
+        : (props: P, i: number): string | undefined => {
+            return `${props?.[useKey]}` ?? i.toString();
+          };
     return getKeyFn(props, i);
   };
 };
@@ -109,3 +110,5 @@ export const RenderMultiple = <
 
   return <Multiple from={propsList} {...rest} />;
 };
+
+export default RenderMultiple;
