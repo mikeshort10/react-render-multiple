@@ -1,5 +1,8 @@
 {
-  "name": "react-render-multiple",
+  "name": "@mikeshort10/react-render-multiple",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/mikeshort10"
+  },
   "version": "1.0.0",
   "description": "React component for rendering a list of components",
   "main": "dist/cjs/index.js",
