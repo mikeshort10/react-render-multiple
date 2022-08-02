@@ -9,13 +9,13 @@ React component to render a list of components inline, with full TypeScript supp
 ## Installation and Usage
 
 ```bash
-  npm i react-render-multiple
+  npm i @mikeshort10/react-render-multiple
 ```
 
 or
 
 ```bash
-  yarn add react-render-multiple
+  yarn add @mikeshort10/react-render-multiple
 ```
 
 Now you can render this:
@@ -51,39 +51,40 @@ const MyCardList = ({ cards }) => {
 
 ## Props
 
-The following props are supported:
+| Name            | Required                                                                          | Type          | Description                                                                                                 |
+| --------------- | --------------------------------------------------------------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| of              | Required                                                                          | `React.FC<T>` | The React Component that will be rendered for each value in `from`.                                         |
+| from            | Required                                                                          | `T[]          | Partial<T>[]`                                                                                               | The list of props that will be passed to the component defined in `of`, which may be a Partial of the props needed to render the component. See `withCommonProps`.                                                                                                                                                                                                                                          |
+| useKey          | Recommended ([See React docs](https://reactjs.org/docs/lists-and-keys.html#keys)) | `keyof T      | (props: T, index: number) => string`                                                                        | Field or method to get the `key` for each Component rendered inside `RenderMultiple`. If a string, it must be a key of props passed into to the Component (`T`) which holds a value of type `string`. If a function, it takes the current props and index and must return a `string` to be used as a key. If no `useKey` is provided, RenderMultiple will simply use the index of the component as the key. |
+| withCommonProps | Optional                                                                          | `Partial<T>`  | Any props that are common to all of the components rendered, such as a common className or onClick handler. |
 
-### of: `React.FC<T>`
-
-`of` should be a React Component that will be rendered for each value in `from`.
-
-### from: `T[] | Partial<T>[]`
-
-`from` defines the props that will be passed to the React Components. The props may be a Partial of the props needed to render the component, so long as the remaining props are passed to the `withCommonProps` attribute.
-
-### useKey: `keyof T | (props: T, index: number) => string`
-
-`useKey` defines how to get the `key` for each Component rendered inside `RenderMultiple`. If it is a string, it must be a key of T that evaluates to a string. If it is a function, it will be passed the current props and the index of the props and must return a string to be used as a key. If no useKey is provided, RenderMultiple will simply use the index of the component as the key. [It's highly recommended that you set this value](https://reactjs.org/docs/lists-and-keys.html#keys), however.
-
-### withCommonProps: `Partial<T>`
-
-`withCommonProps` defines any props that are common to all of the components rendered, such as a common className or onClick handler.
+## Example using `withCommonProps`
 
 ```typescript
 import { Card } from "./Card";
 import { RenderMultiple } from "react-render-multiple";
 
 const MyCardList = ({ cards }) => {
-  const onClick = (card) => `/posts/${card.id}`;
+  const getHref = (card) => `/posts/${card.id}`;
   return (
     <ul>
       <RenderMultiple
         of={Card}
         from={cards}
         useKey="id"
-        withCommonProps={{ onClick }}
+        withCommonProps={{ getHref }}
       />
     </ul>
   );
 };
+```
+
+## Wrapping the Rendered Components
+
+RenderMultiple wraps your list in a `React.Fragment`. To render the contents of RenderMultiple inside another a parent element, just make RenderMultiple the child of your selected wrapper component:
+
+```typescript
+<ul>
+  <RenderMultiple of={ListItem} from={propsList} />
+</ul>
 ```
