@@ -17,6 +17,7 @@ type BaseRenderMultipleProps<
 > = {
   of: React.FC<L & C>;
   useKey?: GetKey<K, L>;
+  ifNone?: React.FC;
 };
 
 type WithoutCommonProps<
@@ -90,6 +91,9 @@ const Multiple = <K extends string, L extends Maybe<Props<K>>>({
   return <>{list}</>;
 };
 
+const hasNone = <T,>(ts: PropsList<T>) =>
+  ts == null || ts.length === 0 || Object.values(ts);
+
 export const RenderMultiple = <
   K extends string,
   L extends Maybe<Props<K>>,
@@ -97,7 +101,9 @@ export const RenderMultiple = <
 >(
   props: WithCommonProps<K, L, C> | WithoutCommonProps<K, L>
 ) => {
-  if (hasCommonProps(props)) {
+  if (hasNone(props.from) && props.ifNone != null) {
+    return <props.ifNone />;
+  } else if (hasCommonProps(props)) {
     const { from, withCommonProps, ...rest } = props;
     const propsList = toArray(from).map((ownProps) => ({
       ...withCommonProps,

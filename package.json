@@ -1,6 +1,6 @@
 {
   "name": "@mikeshort10/react-render-multiple",
-  "version": "1.0.8",
+  "version": "0.0.0-semantic-release",
   "description": "React component for rendering a list of components",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -10,11 +10,15 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
+    "build": "yarn rollup",
     "rollup": "rollup -c",
     "type-check": "tsc --noEmit",
     "prepare": "husky install",
     "lint": "eslint .",
-    "lint:fix": "lint --fix"
+    "lint:fix": "yarn lint --fix"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/mikeshort10"
   },
   "repository": {
     "type": "git",
@@ -30,6 +34,8 @@
   },
   "homepage": "https://github.com/mikeshort10/react-render-multiple#readme",
   "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
     "@rollup/plugin-commonjs": "^22.0.1",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rollup/plugin-typescript": "^8.3.4",
