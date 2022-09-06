@@ -15,7 +15,7 @@
     "type-check": "tsc --noEmit",
     "prepare": "husky install",
     "lint": "eslint .",
-    "lint:fix": "lint --fix"
+    "lint:fix": "yarn lint --fix"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/mikeshort10"
